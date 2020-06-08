@@ -1,6 +1,7 @@
 # SPAMER
 Automatic email sender with Gmail IPA and Excel.
 
+
 ## MacOS
 
 ### Python
