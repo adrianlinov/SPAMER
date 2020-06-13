@@ -69,7 +69,7 @@ class Comunicador:
             htmlEditado = editorHTML.actualizarHTML()
             testEmail = input("INGRESE EL CORREO AL CUAL QUIERE ENVIAR LA PRUEBA: ")
             mensaje = Mensaje(self.service)
-
+            aux = None
             if dic['ATTACHMENT'] == None:
                 pass
             else:
@@ -89,10 +89,12 @@ class Comunicador:
                 htmlEditado = editorHTML.actualizarHTML()
                 mensaje = Mensaje(self.service)
                 print(dic)
+                aux = None
                 if dic['ATTACHMENT'] == None:
                     pass
                 else:
                     aux = str(dic['ATTACHMENT']).split(';', 50)
+
                 mensaje.create_message(self.nombreAMostrar, dic['EMAIL'], self.copia, self.asunto, htmlEditado, aux)
                 mensaje.send_message()
         else:
@@ -140,11 +142,12 @@ class Mensaje():
         mensajeHTML = MIMEText(html_Editado,'html')
         message.attach(mensajeHTML)
 
-        for file in atachmentArray:
-            with open(file, "rb") as f:
-                attach = MIMEApplication(f.read(), _subtype="pdf")
-            attach.add_header('Content-Disposition', 'attachment', filename=str(file))
-            message.attach(attach)
+        if atachmentArray != None:
+            for file in atachmentArray:
+                with open(file, "rb") as f:
+                    attach = MIMEApplication(f.read(), _subtype="pdf")
+                attach.add_header('Content-Disposition', 'attachment', filename=str(file))
+                message.attach(attach)
 
         self.message = {'raw': base64.urlsafe_b64encode(message.as_bytes()).decode()}
 
